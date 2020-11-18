@@ -18,6 +18,21 @@ def predict_price(area) -> float:
     response = requests.get(TRAIN_DATA_URL)
     # YOUR IMPLEMENTATION HERE
     ...
+    text_data = response.text
+    areas = text_data.split('\n')[0]
+    prices = text_data.split('\n')[1]
+    areas = list(map(float, areas.split(',')[1:]))
+    prices = list(map(float, prices.split(',')[1:]))
+    data = [[areas[i], prices[i]] for i in range(len(areas))]
+    from scipy.stats import linregress
+    slope, intercept, r_value, p_value, std_err = linregress(areas, prices)
+    print(slope)
+    print(intercept)
+    print(r_value)
+    print(p_value)
+    print(std_err)
+    res = [ area[i]*slope + intercept for i in range(len(area)) ]
+    return res
 
 
 if __name__ == "__main__":
